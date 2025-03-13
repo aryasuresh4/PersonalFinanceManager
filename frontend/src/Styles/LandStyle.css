@@ -1,0 +1,150 @@
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Navbar Styling */
+.navbars {
+    display: flex;
+    justify-content: space-between; /* Ensures proper spacing */
+    align-items: center;
+    padding: 10px 40px; /* Adjust padding for spacing */
+    background-color: white; /* Matches the background in the image */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+}
+
+/* Logo Styling */
+.logo-img {
+    width: 160px; /* Adjust logo size */
+    height: auto;
+}
+
+/* Navbar content (buttons) */
+.navcontent {
+    display: flex;
+    gap: 20px; /* Space between buttons */
+}
+
+/* General button styling */
+.navcontent button {
+    padding: 10px 20px; /* Padding for better spacing */
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Dashboard Button */
+.dashboard {
+    background-color: white;
+    color: #4a2bcc;
+    border: 1px solid #e8e6e6; /* Light border */
+}
+
+
+
+/* Get Started Button */
+.getstart {
+    background-color: #583fea; /* Purple */
+    color: white;
+    border: none;
+}
+
+.getstart,.dashboard:hover {
+    background-color: #4a2bcc; 
+    color: white;
+}
+
+.landing-container {
+    text-align: center;
+    padding: 100px 20px;
+    background-color: #f4f4f4;
+  }
+  
+  .main-heading {
+    font-size: 40px;
+    font-weight: bold;
+    color: #000;
+  }
+  
+  .sub-heading {
+    font-size: 40px;
+    font-weight: bold;
+    color: #6b46c1; /* Purple */
+    margin-top: 10px;
+  }
+  
+  .description {
+    font-size: 18px;
+    color: #666;
+    margin-top: 15px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .cta-button {
+    margin-top: 20px;
+    padding: 12px 24px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #6b46c1;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .cta-button:hover {
+    background-color: #553c9a; /* Darker purple */
+  }
+
+  
+  .features-section {
+    background-color:#553c9a; /* Green background */
+    padding: 50px 20px;
+    text-align: center;
+  }
+  
+  .features-section h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 30px;
+  }
+  
+  .features-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .feature-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 220px;
+  }
+  
+  .icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-box h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .feature-box p {
+    font-size: 14px;
+    color: #666;
+  }

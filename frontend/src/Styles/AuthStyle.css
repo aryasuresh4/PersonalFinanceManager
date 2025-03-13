@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400&display=swap');
+@import "boxicons/css/boxicons.min.css";
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: change 10s ease-in-out infinite;
+}
+
+@keyframes change {
+  0% { background-position: 0 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+.container {
+  position: relative;
+  width: 800px;
+  height: 500px;
+  margin: 20px;
+}
+
+.bluebg {
+  position: absolute;
+  top: 40px;
+  width: 100%;
+  height: 420px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 5px 45px rgba(0,0,0,0.15);
+  border-radius: 5px;
+}
+
+.bluebg .box {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bluebg .box h2 {
+  color: white;
+  font-size: 1.2em;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.bluebg .box button {
+  cursor: pointer;
+  padding: 10px 20px;
+  background: white;
+  color: black;
+  font-size: 16px;
+  border-style: none;
+  font-weight: 500;
+  border-radius: 5px;
+  border: 2px solid white;
+  transition: 0.3s ease;
+}
+
+.bluebg .box button:hover {
+  background: transparent;
+  color: #fff;
+}
+.signinimage, .signupimage {
+  text-align: left;
+  font-size: 70px;  /* Adjust size */
+  color: #333;  /* Adjust color */
+  display: block;
+  margin: 0 auto 10px; 
+  margin-left: 10px;/* Center icons */
+}
+
+
+.formBx {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: white;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 45px rgba(0,0,0,0.15);
+  transition: 0.5s ease-in-out;
+  border-radius: 5px;
+}
+
+.container.active .formBx {
+  left: 50%;
+}
+
+.formBx .form {
+  position: absolute;
+  width: 100%;
+  padding: 50px;
+  transition: 0.5s;
+}
+
+.formBx .form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.formBx .form form h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.formBx .form form input {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 8px;
+  outline: none;
+  font-size: 14px;
+  border: 1px solid #333;
+  border-radius: 5px;
+}
+
+.formBx .form form input[type="submit"] {
+  background: #5bbbdd;
+  border: none;
+  color: white;
+  max-width: 100px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.formBx .form form input[type="submit"]:hover {
+  letter-spacing: 2px;
+}
+
+.links-container{
+  color: rgb(51, 51, 51);
+  font-size: 14px;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  gap: 20px;
+  
+
+}
+
+.formBx .form .forgot:hover {
+  color: #348dad;
+}
+
+.signupimage {
+  color: #e73c7e;
+}
+
+.signinimage {
+  color: #23a6d5;
+}
