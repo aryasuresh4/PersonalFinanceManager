@@ -1,24 +1,65 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import logo from '../assets/spendlylogo.png';
-import '../Styles/Dash.css';
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import TransactionList from "./TransactionList";
+import logo from "../assets/spendlylogo.png";
+import "../Styles/Dash.css";
 
 export default function Dashboard() {
   const { username } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [taskName, setTaskName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [category, setCategory] = useState('');
+  const [taskName, setTaskName] = useState("");
+  const [amount, setAmount] = useState("");
+  const [category, setCategory] = useState("");
+  const [date, setDate] = useState("");
+
+  const [transactions, setTransactions] = useState([]);
+  const [totalIncome, setTotalIncome] = useState(0);
+  const [totalExpenses, setTotalExpenses] = useState(0);
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTaskName("");
+    setAmount("");
+    setCategory("");
+    setDate("");
+  };
+
+  
 
   const handleAddItem = (e) => {
     e.preventDefault();
-    alert(`Added: ${taskName} - ₹${amount} (${category})`);
-    setTaskName('');
-    setAmount('');
-    setCategory('');
+
+    const newTransaction = {
+      id: Date.now(),
+      taskName,
+      amount: parseFloat(amount),
+      category,
+      date: date || new Date().toISOString().split("T")[0],
+    };
+
+    const fetchTransactions = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/transactions");
+    const data = await response.json();
+    console.log("Fetched Transactions:", data);
+    setTransactions(data || []); // Ensure it's not undefined
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+  }
+};
+
+    setTransactions([...transactions, newTransaction]);
+
+    // Update total income and expenses
+    if (category === "income") {
+      setTotalIncome((prevTotal) => prevTotal + newTransaction.amount);
+    } else if (category === "expense") {
+      setTotalExpenses((prevTotal) => prevTotal + newTransaction.amount);
+    }
+
+    alert(`Added: ${taskName} - ₹${amount} (${category}) on ${newTransaction.date}`);
+
     closeModal();
   };
 
@@ -39,11 +80,19 @@ export default function Dashboard() {
       <div className="dashboard-content">
         <h2 className="welcome-message">Welcome, {username}!</h2>
 
-        <div className="stats-container">
-          <div className="stat-box total-income"><h3>Total Income</h3><p>₹ --</p></div>
-          <div className="stat-box total-expenses"><h3>Total Expenses</h3><p>₹ --</p></div>
-         
-        </div>
+        {/* <div className="stats-container">
+          <div className="stat-box total-income">
+            <h3>Total Income</h3>
+            <p>₹{totalIncome.toFixed(2)}</p>
+          </div>
+          <div className="stat-box total-expenses">
+            <h3>Total Expenses</h3>
+            <p>₹{totalExpenses.toFixed(2)}</p>
+          </div>
+        </div> */}
+
+        {/* Transaction List */}
+        <TransactionList transactions={transactions} />
       </div>
 
       {/* Modal Popup */}
@@ -52,28 +101,35 @@ export default function Dashboard() {
           <div className="modal-content">
             <h3>Add New Item</h3>
             <form onSubmit={handleAddItem} className="new-item-form">
-              <input 
-                type="text" 
-                placeholder="Task Name" 
-                value={taskName} 
-                onChange={(e) => setTaskName(e.target.value)} 
-                required 
+              <input
+                type="text"
+                placeholder="Transaction Name"
+                value={taskName}
+                onChange={(e) => setTaskName(e.target.value)}
+                required
               />
               <select value={category} onChange={(e) => setCategory(e.target.value)} required>
                 <option value="">Select Type</option>
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
               </select>
-              <input 
-                type="number" 
-                placeholder="Enter Amount (₹)" 
-                value={amount} 
-                onChange={(e) => setAmount(e.target.value)} 
-                required 
+              <input
+                type="number"
+                placeholder="Enter Amount (₹)"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+              />
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
               />
               <div className="modal-buttons">
                 <button type="submit">Submit</button>
-                <button type="button" className="close-button" onClick={closeModal}>Cancel</button>
+                <button type="button" className="close-button" onClick={closeModal}>
+                  Cancel
+                </button>
               </div>
             </form>
           </div>

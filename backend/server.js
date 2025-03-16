@@ -1,23 +1,27 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 const cors = require("cors");
-require("dotenv").config();
+const mongoose = require("mongoose");
+
+dotenv.config();
+
+mongoose.connect(process.env.MONGO_URI).then(() => console.log("MongoDB Connected"))
+  .catch(err => console.error("MongoDB Connection Error:", err));
 
 const app = express();
-const PORT = 5000;
-
-// Middleware
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-// Database Connection
-mongoose.connect('mongodb://localhost:27017/')
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error(err));
+// ✅ Make sure you're using the correct routes
+app.use("/api/users", require("./routes/userRoutes"));
+app.use("/api/transactions", require("./routes/transactionRoutes"));
+app.use("/api/transactions", require("./routes/transactionRoutes"));
 
-// Default Route
 app.get("/", (req, res) => {
-    res.send("Welcome to Personal Finance Manager API");
+    res.send("API is running...");
 });
 
+
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
