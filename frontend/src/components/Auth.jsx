@@ -1,45 +1,48 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // For redirection
-import '../Styles/AuthStyle.css';
+import { useNavigate } from "react-router-dom"; // For navigation
+import "../Styles/AuthStyle.css";
 
 const Auth = () => {
   const [isSignIn, setIsSignIn] = useState(true);
-  const [signInData, setSignInData] = useState({ username: "", password: "" });
-  const [signUpData, setSignUpData] = useState({ username: "", email: "", password: "", confirmPassword: "" });
+  const [signInData, setSignInData] = useState({ email: "", password: "" });
+  const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
-    setError(null); // Clear errors on toggle
+    setError(null); // Clear errors when switching forms
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    isSignIn
-      ? setSignInData({ ...signInData, [name]: value })
-      : setSignUpData({ ...signUpData, [name]: value });
+    if (isSignIn) {
+      setSignInData({ ...signInData, [name]: value });
+    } else {
+      setSignUpData({ ...signUpData, [name]: value });
+    }
   };
 
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     setError(null);
 
-    if (!signUpData.username || !signUpData.email || !signUpData.password || !signUpData.confirmPassword) {
+    if (!signUpData.name || !signUpData.email || !signUpData.password || !signUpData.confirmPassword) {
       setError("Please fill in all fields.");
       return;
     }
+
     if (signUpData.password !== signUpData.confirmPassword) {
       setError("Passwords do not match!");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signup", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: signUpData.username,
+          name: signUpData.name,
           email: signUpData.email,
           password: signUpData.password,
         }),
@@ -59,21 +62,24 @@ const Auth = () => {
     e.preventDefault();
     setError(null);
 
-    if (!signInData.username || !signInData.password) {
-      setError("Please enter both username and password.");
+    if (!signInData.email || !signInData.password) {
+      setError("Please enter both email and password.");
       return;
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/signin", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(signInData),
       });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Sign-in failed!");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Sign-in failed!");
+      }
 
+      const data = await response.json();
       localStorage.setItem("token", data.token);
       alert("Sign-in successful!");
       navigate("/dashboard"); // Redirect to Dashboard
@@ -101,8 +107,8 @@ const Auth = () => {
             <div className="form signinForm">
               <form onSubmit={handleSignInSubmit}>
                 <h3>Sign In</h3>
-                <input type="text" name="username" placeholder="Username" value={signInData.username} onChange={handleChange} />
-                <input type="password" name="password" placeholder="Password" value={signInData.password} onChange={handleChange} />
+                <input type="email" name="email" placeholder="Email" value={signInData.email} onChange={handleChange} required />
+                <input type="password" name="password" placeholder="Password" value={signInData.password} onChange={handleChange} required />
                 <input type="submit" value="Login" />
                 <div className="links-container">
                   <a href="#" className="forgot">Forgot Password?</a>
@@ -114,10 +120,10 @@ const Auth = () => {
             <div className="form signupForm">
               <form onSubmit={handleSignUpSubmit}>
                 <h3>Sign Up</h3>
-                <input type="text" name="username" placeholder="Username" value={signUpData.username} onChange={handleChange} />
-                <input type="email" name="email" placeholder="Email Address" value={signUpData.email} onChange={handleChange} />
-                <input type="password" name="password" placeholder="Password" value={signUpData.password} onChange={handleChange} />
-                <input type="password" name="confirmPassword" placeholder="Confirm Password" value={signUpData.confirmPassword} onChange={handleChange} />
+                <input type="text" name="name" placeholder="Full Name" value={signUpData.name} onChange={handleChange} required />
+                <input type="email" name="email" placeholder="Email Address" value={signUpData.email} onChange={handleChange} required />
+                <input type="password" name="password" placeholder="Password" value={signUpData.password} onChange={handleChange} required />
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" value={signUpData.confirmPassword} onChange={handleChange} required />
                 <input type="submit" value="Register" />
               </form>
             </div>
