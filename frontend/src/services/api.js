@@ -139,16 +139,13 @@ import axios from "axios";
 // Backend API URL
 const API_URL = "http://localhost:5000";
 
-// ===============================
-//          AUTH API
-// ===============================
 
-// Sign Up
+
 export const signUp = async (userData) => {
   try {
     console.log("Sending Sign Up Request with Data:", userData);
     
-    const response = await axios.post(`${API_URL}/api/users/signup`, userData, {
+    const response = await axios.post(`${API_URL}/api/auth/signup`, userData, {
       headers: { "Content-Type": "application/json" },
     });
 
@@ -165,7 +162,7 @@ export const signIn = async (userData) => {
   try {
     console.log("Attempting Sign In with:", userData);
 
-    const response = await axios.post(`${API_URL}/api/users/signin`, userData, {
+    const response = await axios.post(`${API_URL}/api/auth/signin`, userData, {
       headers: { "Content-Type": "application/json" },
     });
 
@@ -177,16 +174,17 @@ export const signIn = async (userData) => {
   }
 };
 
-// ===============================
 //       TRANSACTION API
-// ===============================
+
 
 // Get All Transactions (Requires Token)
 export const getTransactions = async (token) => {
   try {
-    const response = await axios.get(`${API_URL}/api/transactions`, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await axios.get("http://localhost:5000/api/transactions", {
+      headers: { Authorization: `Bearer ${token}` }, // ✅ Correct syntax
     });
+    
+    
 
     console.log("Fetched Transactions:", response.data);
     return response.data;
@@ -199,17 +197,15 @@ export const getTransactions = async (token) => {
 // Add Transaction (Requires Token)
 export const addTransaction = async (transactionData, token) => {
   try {
-    const response = await axios.post(`${API_URL}/api/transactions/add`, transactionData, {
+    const response = await axios.post(API_BASE_URL, transactionData, {
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     });
-
-    console.log("Transaction Added:", response.data);
     return response.data;
   } catch (error) {
-    console.error("Error adding transaction:", error?.response?.data || error.message);
+    console.error("❌ Error adding transaction:", error);
     throw error;
   }
-};
+};;
 
 // Update Transaction (Requires Token)
 export const updateTransaction = async (id, updatedData, token) => {
@@ -263,5 +259,6 @@ export const getUserProfile = async (token) => {
 // Logout (Client-Side)
 export const logout = () => {
   localStorage.removeItem("token");
+  
   console.log("User logged out.");
 };

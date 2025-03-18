@@ -66,3 +66,94 @@
     font-weight: bold;
   }
   
+
+  /* Container styling */
+.transaction-list-container {
+  padding: 20px;
+ 
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  margin-left: 0;
+}
+
+/* Header */
+.transaction-list-container h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* No transactions text */
+.no-transactions {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+}
+
+/* Transaction list */
+.transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  transition: background-color 0.3s ease;
+}
+
+.transaction-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* Dynamic colors for income and expense */
+.transaction-item.income {
+  border-left: 4px solid #4caf50; /* Green for income */
+}
+
+.transaction-item.expense {
+  border-left: 4px solid #f44336; /* Red for expense */
+}
+
+/* Text styling for transaction items */
+.category {
+  font-weight: bold;
+  color: #333;
+}
+
+.amount {
+  color: #555;
+}
+
+.type {
+  font-style: italic;
+  color: #888;
+}
+
+/* Refresh button styling */
+.refresh-button {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-button:hover {
+  background-color: #0056b3;
+}

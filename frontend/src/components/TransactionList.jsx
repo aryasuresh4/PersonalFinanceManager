@@ -1,42 +1,53 @@
-import React from "react";
 
-export default function TransactionList({ transactions }) {
-  // Calculate total income and expenses
-  const totalIncome = transactions
-    .filter((transaction) => transaction.category === "income")
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+import axios from "axios";
+import { useEffect, useState } from "react";
+import '../Styles/Transaction.css';
 
-  const totalExpenses = transactions
-    .filter((transaction) => transaction.category === "expense")
-    .reduce((sum, transaction) => sum + transaction.amount, 0);
+const TransactionList = () => {
+  const [transactions, setTransactions] = useState([]);
+  const token = localStorage.getItem("token");
+
+  const fetchTransactions = async () => {
+    try {
+      if (!token) return;
+
+      console.log("🟡 Fetching transactions...");
+      const response = await axios.get("http://localhost:5000/api/transactions", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      console.log("✅ Transactions fetched:", response.data);
+      setTransactions(response.data); // ✅ Update transactions state
+    } catch (error) {
+      console.error("❌ Error fetching transactions:", error.response?.data?.message || error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []); // ✅ Fetch on page load
 
   return (
-    <div>
-      {/* Display Total Income and Expenses */}
-      <div className="stats-container">
-        <div className="stat-box total-income">
-          <h3>Total Income</h3>
-          <p>₹ {totalIncome.toFixed(2)}</p>
-        </div>
-        <div className="stat-box total-expenses">
-          <h3>Total Expenses</h3>
-          <p>₹ {totalExpenses.toFixed(2)}</p>
-        </div>
-      </div>
-
-      {/* Transaction List */}
-      <h3>Transaction History</h3>
-      <ul className="transaction-list">
-        {transactions.length === 0 ? (
-          <p>No transactions yet.</p>
-        ) : (
-          transactions.map((transaction) => (
-            <li key={transaction.id} className={transaction.category}>
-              {transaction.taskName} - ₹{transaction.amount} ({transaction.category}) on {transaction.date}
+    <div className="transaction-list-container">
+      <h2>Transaction List</h2>
+      {transactions.length === 0 ? (
+        <p className="no-transactions">No transactions found.</p>
+      ) : (
+        <ul className="transaction-list">
+          {transactions.map((txn) => (
+            <li key={txn._id} className={`transaction-item ${txn.type}`}>
+              <span className="category">{txn.category}</span>
+              <span className="amount">₹{txn.amount}</span>
+              <span className="type">({txn.type})</span>
             </li>
-          ))
-        )}
-      </ul>
+          ))}
+        </ul>
+      )}
+      <button className="refresh-button" onClick={fetchTransactions}>
+        🔄 Refresh Transactions
+      </button>
     </div>
   );
-}
+};
+
+export default TransactionList;

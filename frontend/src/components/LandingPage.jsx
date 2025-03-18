@@ -19,9 +19,9 @@ const LandingPage = () => {
 
         {/* Navbar Buttons */}
         <div className="navcontent">
-          <Link to='/dashboard'>
+          {/* <Link to='/dashboard'>
               <button className="dashboard">Dashboard</button>
-          </Link>
+          </Link> */}
           <Link to="/auth">   
             <button className="getstart">Get Started</button>
           </Link>

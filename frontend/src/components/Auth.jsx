@@ -26,58 +26,39 @@ const Auth = () => {
   // ✅ Sign-Up Function with Popup Messages
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!signUpData.name || !signUpData.email || !signUpData.password || !signUpData.confirmPassword) {
-        Swal.fire({
-            icon: "warning",
-            title: "Oops...",
-            text: "Please fill in all fields!",
-        });
-        return;
+      Swal.fire({ icon: "warning", title: "Oops...", text: "Please fill in all fields!" });
+      return;
     }
-
+  
     if (signUpData.password !== signUpData.confirmPassword) {
-        Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Passwords do not match!",
-        });
-        return;
+      Swal.fire({ icon: "error", title: "Oops...", text: "Passwords do not match!" });
+      return;
     }
-
+  
     try {
-        const response = await signUp({
-            username: signUpData.name, // Ensure field names match backend
-            email: signUpData.email,
-            password: signUpData.password,
-        });
-
-        if (!response || !response.data) {
-            throw new Error("Unexpected empty response from server");
-        }
-
-        console.log("Full Response:", response);
-        console.log("Full Response Data:", JSON.stringify(response?.data, null, 2));
-
-        Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: response.data.message || "Sign-up successful! Please sign in.",
-        });
-
-        setIsSignIn(true);
-    } catch (error) {
-      console.log("Error:", error); // Log full error object
-      console.log("Error Response:", error.response); // Log error response if available
-      console.log("Error Data:", error.response?.data); // Log response data if present
-      
-      Swal.fire({
-        icon: "error",
-        title: "Sign-up Failed",
-        text: error.response?.data?.message || "Something went wrong! Please check the console for details.",
+      const response = await signUp({
+        username: signUpData.name,
+        email: signUpData.email,
+        password: signUpData.password,
       });
-  }
-};
+  
+      console.log("Full Response:", response);
+  
+      if (!response || typeof response !== "object") {
+        throw new Error("Unexpected empty response from server");
+      }
+  
+      Swal.fire({ icon: "success", title: "Success!", text: response.message || "Sign-up successful! Please sign in." });
+  
+      setIsSignIn(true);
+    } catch (error) {
+      console.log("Error:", error);
+      Swal.fire({ icon: "error", title: "Sign-up Failed", text: error.message || "Something went wrong!" });
+    }
+  };
+  
 
 
   // ✅ Sign-In Function with Popup Messages

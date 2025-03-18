@@ -9,6 +9,7 @@ import AddTransaction from "./pages/AddTransaction";
 function App() {
   return (
     
+    
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />

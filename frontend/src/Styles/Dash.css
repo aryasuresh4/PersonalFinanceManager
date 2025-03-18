@@ -32,22 +32,53 @@
 }
 
 /* Links Styling */
-.dash, .add {
+.dash, .add{
     font-family: "Berkish", sans-serif; /* Apply Berkish font */
     text-decoration: none;
     color: white;
     font-size: 18px;
     font-weight: bold;
-    width: 180px;
+    width: 100px;
     height: 40px;
     line-height: 40px;
     text-align: center;
     border-radius: 8px;  /* Rounded edges */
     transition: all 0.3s ease-in-out;
 }
+.logout-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "Berkish", sans-serif;
+  text-decoration: none;
+  color: white;
+  margin-top: 30px;
+  font-size: 18px;
+  font-weight: bold;
+  width: 150px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  background: linear-gradient(135deg, #c0392b, #a93226);
+  transform: scale(1.05);
+}
+
+.logout-icon {
+  font-size: 20px;
+}
+
 
 /* Hover Effect */
-.dash:hover, .add:hover {
+.dash:hover, .add:hover{
     background-color: white;
     color: rgb(48, 12, 83);
     transform: scale(1.05);  /* Slight pop-up effect */
@@ -85,7 +116,7 @@
   
   .stats-container {
     display: flex;
-    gap: 20px;
+    gap: 10px;
     margin-top: 20px;
   }
   
