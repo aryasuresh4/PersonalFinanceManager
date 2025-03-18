@@ -1,10 +1,5 @@
 /* Import Custom Font */
-@font-face {
-    font-family: "Berkish";
-    src: url("/fonts/Berkish.ttf") format("truetype"); /* Ensure correct path */
-    font-weight: normal;
-    font-style: normal;
-}
+
 
 /* Sidebar Styling */
 .left-dash {

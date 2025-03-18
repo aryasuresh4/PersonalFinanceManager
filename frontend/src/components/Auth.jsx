@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
-import "../Styles/AuthStyle.css";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2"; // Import SweetAlert2
+import { signUp, signIn } from "../services/api"; // Import authentication functions
+import "../Styles/AuthStyle.css"; // Keep your styling
 
 const Auth = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [signInData, setSignInData] = useState({ email: "", password: "" });
   const [signUpData, setSignUpData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const toggleForm = () => {
     setIsSignIn(!isSignIn);
-    setError(null); // Clear errors when switching forms
   };
 
   const handleChange = (e) => {
@@ -23,70 +23,112 @@ const Auth = () => {
     }
   };
 
+  // ✅ Sign-Up Function with Popup Messages
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
 
     if (!signUpData.name || !signUpData.email || !signUpData.password || !signUpData.confirmPassword) {
-      setError("Please fill in all fields.");
-      return;
+        Swal.fire({
+            icon: "warning",
+            title: "Oops...",
+            text: "Please fill in all fields!",
+        });
+        return;
     }
 
     if (signUpData.password !== signUpData.confirmPassword) {
-      setError("Passwords do not match!");
-      return;
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Passwords do not match!",
+        });
+        return;
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: signUpData.name,
-          email: signUpData.email,
-          password: signUpData.password,
-        }),
-      });
+        const response = await signUp({
+            username: signUpData.name, // Ensure field names match backend
+            email: signUpData.email,
+            password: signUpData.password,
+        });
 
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Sign-up failed!");
+        if (!response || !response.data) {
+            throw new Error("Unexpected empty response from server");
+        }
 
-      alert("Sign-up successful! Please sign in.");
-      setIsSignIn(true);
+        console.log("Full Response:", response);
+        console.log("Full Response Data:", JSON.stringify(response?.data, null, 2));
+
+        Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: response.data.message || "Sign-up successful! Please sign in.",
+        });
+
+        setIsSignIn(true);
     } catch (error) {
-      setError(error.message);
-    }
-  };
+      console.log("Error:", error); // Log full error object
+      console.log("Error Response:", error.response); // Log error response if available
+      console.log("Error Data:", error.response?.data); // Log response data if present
+      
+      Swal.fire({
+        icon: "error",
+        title: "Sign-up Failed",
+        text: error.response?.data?.message || "Something went wrong! Please check the console for details.",
+      });
+  }
+};
 
+
+  // ✅ Sign-In Function with Popup Messages
+  
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-
+  
     if (!signInData.email || !signInData.password) {
-      setError("Please enter both email and password.");
+      Swal.fire({
+        icon: "warning",
+        title: "Oops...",
+        text: "Please enter both email and password!",
+      });
       return;
     }
-
+  
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(signInData),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Sign-in failed!");
+      const response = await signIn(signInData);
+  
+      // Log the response object to understand the structure
+      console.log("Full Response:", response);
+      console.log("Full Response Data:", JSON.stringify(response, null, 2)); // Directly log the full response
+  
+      // Access token directly, without response.data
+      const token = response.token; // Fix: Access token directly from response
+  
+      if (!token) {
+        throw new Error("Token not received from server");
       }
-
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      alert("Sign-in successful!");
-      navigate("/dashboard"); // Redirect to Dashboard
+  
+      localStorage.setItem("token", token); // Store token in localStorage
+  
+      Swal.fire({
+        icon: "success",
+        title: "Welcome!",
+        text: "Sign-in successful!",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+  
+      navigate("/dashboard");
     } catch (error) {
-      setError(error.message);
+      console.log("Error:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Sign-in Failed",
+        text: error.response?.data?.message || "Invalid credentials!",
+      });
     }
   };
+  
 
   return (
     <div className="auth-container">
@@ -130,8 +172,6 @@ const Auth = () => {
           )}
         </div>
       </div>
-
-      {error && <div className="error-message">{error}</div>}
     </div>
   );
 };
