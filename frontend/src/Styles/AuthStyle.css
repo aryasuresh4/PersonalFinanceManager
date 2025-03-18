@@ -172,3 +172,29 @@
 .signinimage {
   color: #23a6d5;
 }
+
+
+/* Styling for icons */
+.signin-icon, .signup-icon {
+  font-size: 70px; /* Adjust size */
+  color: rgba(255, 255, 255, 0.8);
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.container.active .signup-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.container .signin-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.container.active .signin-icon {
+  opacity: 0;
+  transform: scale(0.8);
+}
+

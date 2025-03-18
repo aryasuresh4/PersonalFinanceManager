@@ -34,14 +34,24 @@ const TransactionList = () => {
         <p className="no-transactions">No transactions found.</p>
       ) : (
         <ul className="transaction-list">
-          {transactions.map((txn) => (
-            <li key={txn._id} className={`transaction-item ${txn.type}`}>
-              <span className="category">{txn.category}</span>
-              <span className="amount">₹{txn.amount}</span>
-              <span className="type">({txn.type})</span>
-            </li>
-          ))}
-        </ul>
+  {transactions.map((txn) => {
+    // Format the date to dd/mm/yyyy
+    const formattedDate = new Date(txn.date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+
+    return (
+      <li key={txn._id} className={`transaction-item ${txn.type}`}>
+        <span className="category">{txn.category}</span>
+        <span className="amount">₹{txn.amount}</span>
+        <span className="type">{formattedDate}</span>
+      </li>
+    );
+  })}
+</ul>
+
       )}
       <button className="refresh-button" onClick={fetchTransactions}>
         🔄 Refresh Transactions
