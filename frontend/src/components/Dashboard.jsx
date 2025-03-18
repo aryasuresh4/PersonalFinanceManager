@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react"; // Added `useEffect`
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Doughnut } from "react-chartjs-2"; // Import Doughnut chart
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js"; // Import necessary Chart.js components
 
 import TransactionList from "./TransactionList";
 import logo from "../assets/spendlylogo.png";
@@ -8,8 +9,11 @@ import "../Styles/Dash.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 
+// Register Chart.js components
+ChartJS.register(ArcElement, Tooltip, Legend);
+
 export default function Dashboard() {
-  const { username } = useParams();
+  const [username, setUsername] = useState(""); // State to hold the username
 
   // State for transactions and totals
   const [transactions, setTransactions] = useState([]);
@@ -32,8 +36,19 @@ export default function Dashboard() {
     setDate("");
   };
 
-  // Fetch transactions and update totals
+  // Fetch username and transactions
   useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/users/profile", {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+        setUsername(response.data.username); // Set the username
+      } catch (error) {
+        console.error("Error fetching user profile:", error.response?.data || error.message);
+      }
+    };
+
     const fetchTransactions = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/transactions", {
@@ -57,6 +72,7 @@ export default function Dashboard() {
       }
     };
 
+    fetchUserProfile();
     fetchTransactions();
   }, []);
 
@@ -69,40 +85,52 @@ export default function Dashboard() {
       alert("All fields are required.");
       return;
     }
-  
+
     const newTransaction = {
       type: category, // Use 'income' or 'expense'
       amount: parseFloat(amount),
       category: taskName, // Use task name as the category
       date: date || new Date().toISOString().split("T")[0],
     };
-  
+
     try {
       console.log("New Transaction Payload:", newTransaction); // Debugging
       const response = await axios.post("http://localhost:5000/api/transactions", newTransaction, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
-  
+
       const savedTransaction = response.data;
       setTransactions([...transactions, savedTransaction]);
-  
+
       if (savedTransaction.type === "income") {
         setTotalIncome((prev) => prev + savedTransaction.amount);
       } else if (savedTransaction.type === "expense") {
         setTotalExpenses((prev) => prev + savedTransaction.amount);
       }
-  
+
       closeModal();
     } catch (error) {
       console.error("Error adding transaction:", error.response?.data || error.message);
     }
   };
-  
 
   // Logout function
   const logout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/"; // Redirect to login page
+    window.location.href = "/auth"; // Redirect to login page
+  };
+
+  // Prepare Chart Data
+  const chartData = {
+    labels: ["Income", "Expenses"],
+    datasets: [
+      {
+        label: "₹ Transactions",
+        data: [totalIncome, totalExpenses],
+        backgroundColor: ["#4CAF50", "#F44336"], // Green for income, red for expenses
+        hoverBackgroundColor: ["#45a049", "#e53935"],
+      },
+    ],
   };
 
   return (
@@ -141,10 +169,17 @@ export default function Dashboard() {
             <p>₹{totalBalance.toFixed(2)}</p>
           </div>
         </div>
-
         {/* Transaction List */}
         <TransactionList transactions={transactions} />
       </div>
+
+        {/* Chart Section */}
+        <div className="chart-container">
+          <h3>Income vs Expenses</h3>
+          <Doughnut data={chartData} />
+        </div>
+
+        
 
       {/* Modal Popup */}
       {isModalOpen && (
