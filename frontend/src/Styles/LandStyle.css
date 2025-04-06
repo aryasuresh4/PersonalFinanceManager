@@ -54,7 +54,7 @@
     border: none;
 }
 
-.getstart:hover {
+.getstart,.dashboard:hover {
     background-color: #4a2bcc; 
     color: white;
 }
