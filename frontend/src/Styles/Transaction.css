@@ -158,3 +158,155 @@
   background-color: #0056b3;
 }
 
+.transaction-list-container {
+  padding: 20px;
+  background-color: #f9f9f9; /* Light background */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a modern look */
+}
+
+h2 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  color: #333; /* Dark text */
+  margin-bottom: 20px;
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px; /* Spacing for filters */
+}
+
+.filters select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between; /* Align content horizontally */
+  align-items: center; /* Vertically center */
+  padding: 10px 15px;
+  background-color: #ffffff; /* White background for each item */
+  border: 1px solid #eaeaea; /* Subtle border */
+  border-radius: 6px; /* Rounded edges */
+  margin-bottom: 10px; /* Space between items */
+  transition: background-color 0.3s ease; /* Hover effect transition */
+}
+
+.transaction-item:hover {
+  background-color: #f1f1f1; /* Highlight on hover */
+}
+
+.transaction-item.income {
+  border-left: 4px solid #4CAF50; /* Green for income */
+}
+
+.transaction-item.expense {
+  border-left: 4px solid #F44336; /* Red for expense */
+}
+
+.transaction-item span {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ddd; /* Button hover effect */
+}
+
+.refresh-button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.refresh-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensures it appears above other elements */
+}
+
+.modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.modal-content form input,
+.modal-content form select {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-buttons button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-buttons button[type="submit"] {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+.modal-buttons button.close-button {
+  background-color: #F44336;
+  color: #fff;
+}

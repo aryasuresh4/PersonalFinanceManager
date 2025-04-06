@@ -1,3 +1,4 @@
+
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2"; // Import Doughnut chart
@@ -142,7 +143,7 @@ export default function Dashboard() {
         </a>
         <div className="logoMain">
           <a href="#" className="dash">Dashboard</a>
-          <button className="add-button" onClick={openModal}>+ Add Item</button>
+          <button className="add-button" onClick={openModal}>+ Add Transaction</button>
           <div className="logout">
             <button className="logout-button" onClick={logout}>
               <FontAwesomeIcon icon={faSignOutAlt} className="logout-icon" /> Logout
@@ -153,7 +154,9 @@ export default function Dashboard() {
 
       {/* Main Dashboard */}
       <div className="dashboard-content">
-        <h2 className="welcome-message">Welcome, {username}!</h2>
+      <h2 className="welcome-message">
+  Welcome to Spendly{username ? `, ${username}!` : "!"}
+</h2>
 
         <div className="stats-container">
           <div className="stat-box total-income">
